@@ -1,0 +1,3 @@
+language: aspnet
+fprocess: faas-run ./function.dll
+
