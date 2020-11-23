@@ -146,7 +146,7 @@ Secrets that the function has access to are also loaded into the configuration m
 
 NOTE: The value of the secret is read as a byte array and then stored as a base64 string.
 
-You can also use the extension methods `GetSecret` and `GetSecretAsString` by installing [Redpanda.OpenFaaS.Extensions.Configuration](https://www.nuget.org/packages/Redpanda.OpenFaaS.Extensions.Configuration/). You can read more [here](https://github.com/redpandaltd/openfaas-configuration-extensions/blob/master/README.md).
+You can also use the extension methods `GetSecret` and `GetSecretAsString` by installing [Redpanda.OpenFaaS.Extensions.Configuration](https://www.nuget.org/packages/Redpanda.Extensions.OpenFaaS.Configuration/). You can read more [here](https://github.com/redpandaltd/faas-configuration-extensions/blob/master/README.md).
 
 ## Route templates
 
@@ -165,7 +165,7 @@ public class Function : HttpFunction
 
 ## Manual route handling
 
-By default, only root path or route templates are accepted by the handler. Everything else throws back a 404 response. If we want to bypass this and handle the routes on the function, we can enable `AllowCustomPath` in the options, when configuring our function in the `Startup.cs` file.
+By default, only root path or route templates are accepted by the handler. Everything else throws back a 404 response. If we want to bypass this and handle the routes on the function, we can set `IgnoreRoutingRules=true` in the options, when configuring our function in the `Startup.cs` file.
 
 ```csharp
 public void ConfigureServices( IServiceCollection services )
@@ -175,7 +175,7 @@ public void ConfigureServices( IServiceCollection services )
     // add your services here.
     services.Configure<HttpFunctionOptions>( options =>
     {
-        options.AllowCustomPath = true;
+        options.IgnoreRoutingRules = true;
     } );
 }
 ```
@@ -195,9 +195,28 @@ namespace OpenFaaS
 }
 ```
 
-## Extensions
+## Debugging
 
-|Name|Description|
-|---|---|
-|API Key Secret Authentication|Provides an API Key authentication based on an OpenFaaS secret. Available on [NuGet](https://www.nuget.org/packages/Redpanda.OpenFaaS.Extensions.Authentication/). Read more [here](https://github.com/redpandaltd/openfaas-authentication-extensions/blob/master/README.md).|
-|Configuration|Configuration extensions. Available on [NuGet](https://www.nuget.org/packages/Redpanda.OpenFaaS.Extensions.Configuration/). You can read more [here](https://github.com/redpandaltd/openfaas-configuration-extensions/blob/master/README.md).|
+It is possible to run a function locally with `faas-run` CLI. This also adds the option to attach to the process when running, to be able to debug the function. A configuration file can be passed to the runner. The CLI takes the debug assembly as argument.
+
+```
+~/source/hello$ faas-run bin/Debug/netstandard2.0/function.dll
+```
+
+### VS Code
+
+When using VS Code, a configuration can be easily created in `launch.json` file that uses `faas-run`. This skips the need to manually attach to a process.
+
+```json
+{
+    "name": ".NET Core Launch (faas run)",
+    "type": "coreclr",
+    "request": "launch",
+    "preLaunchTask": "build",
+    "program": "faas-run",
+    "args": ["bin/Debug/netstandard2.0/function.dll", "--no-auth"],
+    "cwd": "${workspaceFolder}",
+    "stopAtEntry": false,
+    "console": "internalConsole"
+},
+```
