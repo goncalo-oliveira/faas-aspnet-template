@@ -17,7 +17,7 @@ namespace OpenFaaS
                 Message = "Hello!"
             };
 
-            return Task.FromResult( Ok( result ) );
+            return Task.FromResult<IActionResult>( Ok( result ) );
         }
     }
 }
