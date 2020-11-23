@@ -146,7 +146,7 @@ Secrets that the function has access to are also loaded into the configuration m
 
 NOTE: The value of the secret is read as a byte array and then stored as a base64 string.
 
-You can also use the extension methods `GetSecret` and `GetSecretAsString` by installing [Redpanda.OpenFaaS.Extensions.Configuration](https://www.nuget.org/packages/Redpanda.Extensions.OpenFaaS.Configuration/). You can read more [here](https://github.com/redpandaltd/faas-configuration-extensions/blob/master/README.md).
+You can also use the extension methods `GetSecret` and `GetSecretAsString` by installing [Redpanda.Extensions.OpenFaaS.Configuration](https://www.nuget.org/packages/Redpanda.Extensions.OpenFaaS.Configuration/). You can read more [here](https://github.com/redpandaltd/faas-configuration-extensions/blob/master/README.md).
 
 ## Route templates
 
