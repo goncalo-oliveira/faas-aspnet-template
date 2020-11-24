@@ -91,7 +91,7 @@ namespace OpenFaaS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices( IServiceCollection services )
         {
-            services.AddTransient<IHttpFunction, Function>();
+            services.AddHttpFunction<Function>();
 
             // add your services here.
         }
@@ -104,7 +104,7 @@ As an example, let's consider we want to make `IHttpClientFactory` accessible on
 ```csharp
 public void ConfigureServices( IServiceCollection services )
 {
-    services.AddTransient<IHttpFunction, Function>();
+    services.AddHttpFunction<Function>();
 
     // add your services here.
     services.AddHttpClient();
@@ -170,13 +170,12 @@ By default, only root path or route templates are accepted by the handler. Every
 ```csharp
 public void ConfigureServices( IServiceCollection services )
 {
-    services.AddTransient<IHttpFunction, Function>();
-
-    // add your services here.
-    services.Configure<HttpFunctionOptions>( options =>
+    services.AddHttpFunction<Function>( options =>
     {
         options.IgnoreRoutingRules = true;
     } );
+
+    // add your services here.
 }
 ```
 
