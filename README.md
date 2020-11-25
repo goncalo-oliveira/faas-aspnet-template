@@ -42,7 +42,7 @@ namespace OpenFaaS
 
 This is just an example. You can now start implementing your function.
 
-If you want to restrict function execution to a particular HTTP method (or methods) you can decorate `HandleAsync` with HTTP method attributes.
+If you want to restrict function execution to a particular HTTP method (or methods) you can decorate `HandleAsync` with HTTP method attributes. Unandled metods will return a 405 response.
 
 ```csharp
 public class Function : HttpFunction
@@ -54,30 +54,6 @@ public class Function : HttpFunction
     }
 }
 ```
-
-You can also implement only a specific HTTP method (or multiple, each with its own logic) if you want. Instead of overriding the public method `HandleAsync`, override the protected methods `HandleGetAsync` or `HandlePostAsync` for example.
-
-``` csharp
-namespace OpenFaaS
-{
-    public class Function : HttpFunction
-    {
-        // not overriding HandleAsync so that I can use the other handlers
-
-        protected override Task<IActionResult> HandlePostAsync( HttpRequest request )
-        {
-            var result = new
-            {
-                Message = "Hello POST!"
-            };
-
-            return Task.FromResult( Ok( result ) );
-        }
-    }
-}
-```
-
-When we use this, all methods that are not handled return a 405.
 
 ## Dependency Injection
 
@@ -146,7 +122,20 @@ Secrets that the function has access to are also loaded into the configuration m
 
 NOTE: The value of the secret is read as a byte array and then stored as a base64 string.
 
-You can also use the extension methods `GetSecret` and `GetSecretAsString` by installing [Redpanda.Extensions.OpenFaaS.Configuration](https://www.nuget.org/packages/Redpanda.Extensions.OpenFaaS.Configuration/). You can read more [here](https://github.com/redpandaltd/faas-configuration-extensions/blob/master/README.md).
+You can also use the extension methods `GetSecret` and `GetSecretAsString`.
+
+```csharp
+public void ConfigureServices( IServiceCollection services )
+{
+    services.AddHttpFunction<Function>();
+
+    // add your services here.
+    services.AddMyService( options =>
+    {
+        options.ApiKey = Configuration.GetSecretAsString( "my-api-key" );
+    } );
+}
+```
 
 ## Route templates
 
