@@ -1,6 +1,6 @@
-# OpenFaaS ASPNET Template
+# OpenFaaS ASPNET Functions
 
-This template for OpenFaaS makes use of ASP.NET 5. This allows more control over the request (by providing an `HttpRequest` instance) and better handling of the response by returning an `IActionResult`.
+This project offers templates for OpenFaaS that make use of ASP.NET 5. The templates allow more control over the request (by providing an `HttpRequest` instance) and a better handling of the response by returning an `IActionResult`. Both C# and F# are supported.
 
 ## Installing the template
 
@@ -12,7 +12,7 @@ faas-cli template pull https://github.com/redpandaltd/faas-aspnet-template
 
 ## Using the template
 
-After installing the template, create a new function with the `aspnet` template.
+After installing, create a new function with the `aspnet` template. This will generate a C# template. If you want to create a F# template instead, use the `aspnet-fsharp` template.
 
 ```bash
 faas-cli new --lang aspnet <function-name>
