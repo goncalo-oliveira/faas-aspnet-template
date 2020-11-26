@@ -7,7 +7,7 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # caches restore result by copying csproj file separately
 WORKDIR /source/faas/function
-COPY function/function.csproj .
+COPY function/function.fsproj .
 
 # restore packages
 RUN dotnet restore
@@ -17,7 +17,7 @@ WORKDIR /source/faas
 COPY . .
 
 # build and publish
-RUN dotnet publish -c release -o published function/function.csproj
+RUN dotnet publish -c release -o published function/function.fsproj
 
 # runner
 FROM docker.pkg.github.com/redpandaltd/faas-run/faas-run:1.3

@@ -1,0 +1,3 @@
+language: aspnet-fsharp
+fprocess: faas-run ./function.dll
+
