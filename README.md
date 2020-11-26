@@ -1,6 +1,6 @@
 # OpenFaaS ASPNET Functions
 
-This project offers templates for OpenFaaS that make use of ASP.NET 5. The templates allow more control over the request (by providing an `HttpRequest` instance) and a better handling of the response by returning an `IActionResult`. Both C# and F# are supported.
+This project offers templates for OpenFaaS that make use of ASP.NET 5. The templates allow more control over the request (by providing an `HttpRequest` instance) and a better handling of the response by returning an `IActionResult`. Both C# and F# languages are supported.
 
 ## Installing the template
 
