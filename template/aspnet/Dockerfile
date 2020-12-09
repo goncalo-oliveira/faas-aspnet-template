@@ -20,7 +20,7 @@ COPY . .
 RUN dotnet publish -c release -o published function/function.csproj
 
 # runner
-FROM docker.pkg.github.com/redpandaltd/faas-run/faas-run:1.3
+FROM docker.pkg.github.com/redpandaltd/faas-run/faas-run:1.4
 
 COPY --from=watchdog /fwatchdog /usr/bin/
 

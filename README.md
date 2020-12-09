@@ -118,7 +118,7 @@ The template also exposes ASPNET's configuration model. The `Startup.cs` file co
 
 ### OpenFaaS Secrets
 
-Secrets that the function has access to are also loaded into the configuration model. They are prepended with the prefix `openfaas_secret_`. For example, a secret named `my-secret-key` can be accessed with the configuration key `openfaas_secret_my-secret-key`.
+Secrets that the function has access to are also loaded into the configuration model. They are prepended with the prefix `_secret_`. For example, a secret named `my-secret-key` can be accessed with the configuration key `_secret_my-secret-key`.
 
 NOTE: The value of the secret is read as a byte array and then stored as a base64 string.
 
