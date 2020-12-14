@@ -1,6 +1,9 @@
 FROM openfaas/of-watchdog:0.8.1 as watchdog
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 as builder
+ARG PACKAGE_SOURCE
+ARG PACKAGE_SOURCE_USERNAME
+ARG PACKAGE_SOURCE_PASSWORD
 
 # suppress data collection
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
@@ -10,7 +13,10 @@ WORKDIR /source/faas/function
 COPY function/function.csproj .
 
 # restore packages
-RUN dotnet restore
+COPY add-package-source.sh /tmp/
+RUN chmod u+x /tmp/add-package-source.sh \
+    && /tmp/add-package-source.sh $PACKAGE_SOURCE $PACKAGE_SOURCE_USERNAME $PACKAGE_SOURCE_PASSWORD \
+    && dotnet restore
 
 # Copies the rest of the code
 WORKDIR /source/faas
