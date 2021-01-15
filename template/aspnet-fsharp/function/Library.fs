@@ -2,7 +2,7 @@
 
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
-open Redpanda.OpenFaaS
+open OpenFaaS
 open System
 open System.Threading.Tasks
 

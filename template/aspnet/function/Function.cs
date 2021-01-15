@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Redpanda.OpenFaaS;
+using OpenFaaS;
 using System;
 using System.Threading.Tasks;
 

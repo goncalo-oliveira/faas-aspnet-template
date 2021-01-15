@@ -7,7 +7,7 @@ This project offers templates for OpenFaaS that make use of ASP.NET 5. The templ
 Just pull the template with the faas CLI.
 
 ```bash
-faas-cli template pull https://github.com/redpandaltd/faas-aspnet-template
+faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template
 ```
 
 ## Using the template
@@ -185,7 +185,7 @@ namespace OpenFaaS
 
 ## Debugging and running locally
 
-It is possible to run a function locally with [FaaS Runner](https://github.com/redpandaltd/faas-run). This also adds the option to attach to the process when running, to be able to debug the function. A configuration file can be passed to the runner. The CLI takes the assembly pat as argument.
+It is possible to run a function locally with [FaaS Runner](https://github.com/goncalo-oliveira/faas-run). This also adds the option to attach to the process when running, to be able to debug the function. A configuration file can be passed to the runner. The CLI takes the assembly pat as argument.
 
 ```
 ~/source/hello$ faas-run bin/Debug/netstandard2.0/function.dll
