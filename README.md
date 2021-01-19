@@ -42,7 +42,7 @@ namespace OpenFaaS
 
 This is just an example. You can now start implementing your function.
 
-If you want to restrict function execution to a particular HTTP method (or methods) you can decorate `HandleAsync` with HTTP method attributes. Unandled metods will return a 405 response.
+If you want to restrict function execution to a particular HTTP method (or methods) you can decorate `HandleAsync` with HTTP method attributes. Unhandled metods will return a 405 response.
 
 ```csharp
 public class Function : HttpFunction
