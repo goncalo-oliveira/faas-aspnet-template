@@ -23,7 +23,7 @@ WORKDIR /source/faas
 COPY . .
 
 # build and publish
-RUN dotnet publish -c release -o published api/api.csproj
+RUN dotnet publish -c release -o published function/function.csproj
 
 # runner
 FROM docker.pkg.github.com/goncalo-oliveira/faas-api-run/faas-api-run:0.2
@@ -40,7 +40,7 @@ RUN chown app:app -R /home/app
 
 USER app
 
-ENV fprocess="faas-api-run ./api.dll"
+ENV fprocess="faas-api-run ./function.dll"
 ENV cgi_headers="true"
 ENV mode="http"
 ENV upstream_url="http://localhost:9000"

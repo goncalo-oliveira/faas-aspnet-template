@@ -1,3 +1,3 @@
 language: aspnet-api
-fprocess: faas-api-run ./api.dll
+fprocess: faas-api-run ./function.dll
 
