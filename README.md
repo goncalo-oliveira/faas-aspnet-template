@@ -238,7 +238,7 @@ namespace OpenFaaS
 
 ## Debugging and running locally
 
-It is possible to run a function locally with [FaaS Runner](https://github.com/goncalo-oliveira/faas-run). This also adds the option to attach to the process when running, to be able to debug the function. A configuration file can be passed to the runner. The CLI takes the assembly pat as argument.
+It is possible to run a function locally with [FaaS Runner](https://github.com/goncalo-oliveira/faas-run). This also adds the option to attach to the process when running, to be able to debug the function. A configuration file can be passed to the runner. The CLI takes the assembly path as argument.
 
 ```
 ~/source/hello$ faas-run bin/Debug/netstandard2.0/function.dll
