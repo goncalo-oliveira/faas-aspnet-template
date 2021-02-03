@@ -1,6 +1,6 @@
 FROM openfaas/of-watchdog:0.8.1 as watchdog
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 as builder
+FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim as builder
 ARG PACKAGE_SOURCE
 ARG PACKAGE_SOURCE_USERNAME
 ARG PACKAGE_SOURCE_PASSWORD
@@ -9,8 +9,8 @@ ARG PACKAGE_SOURCE_PASSWORD
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 
 # caches restore result by copying csproj file separately
-WORKDIR /source/faas/api
-COPY api/api.csproj .
+WORKDIR /source/faas/function
+COPY function/function.csproj .
 
 # restore packages
 COPY add-package-source.sh /tmp/
@@ -26,7 +26,7 @@ COPY . .
 RUN dotnet publish -c release -o published function/function.csproj
 
 # runner
-FROM docker.pkg.github.com/goncalo-oliveira/faas-api-run/faas-api-run:0.2
+FROM docker.pkg.github.com/goncalo-oliveira/faas-run/faas-run:1.6
 
 COPY --from=watchdog /fwatchdog /usr/bin/
 
@@ -40,7 +40,7 @@ RUN chown app:app -R /home/app
 
 USER app
 
-ENV fprocess="faas-api-run ./function.dll"
+ENV fprocess="faas-run ./function.dll"
 ENV cgi_headers="true"
 ENV mode="http"
 ENV upstream_url="http://localhost:9000"

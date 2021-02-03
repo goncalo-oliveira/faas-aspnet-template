@@ -1,3 +1,0 @@
-language: aspnet-api
-fprocess: faas-api-run ./function.dll
-
