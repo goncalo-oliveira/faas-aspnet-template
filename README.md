@@ -183,6 +183,59 @@ namespace OpenFaaS
 }
 ```
 
+## Controller-based template
+
+Sometimes we want to create a more complex workload, with multiple methods or even with multiple routes. For these scenarios, we wan us the `aspnet-controller` template. When we create a new function with this template, instead of having a `Function.cs` we now have a `Controller.cs` file.
+
+```csharp
+namespace OpenFaaS
+{
+    [ApiController]
+    [Route("/")]
+    public class Controller : ControllerBase
+    {
+        [HttpGet]
+        public Task<IActionResult> GetAsync()
+        {
+            var result = new
+            {
+                Message = "Hello!"
+            };
+
+            return Task.FromResult<IActionResult>( Ok( result ) );
+        }
+    }
+}
+```
+
+This controller class is exactly the same as we would have when creating a Web API project with ASPNET. We also still have access to a `Startup.cs` file. Additionally, we have access to the HTTP request pipeline configuration.
+
+```csharp
+namespace OpenFaaS
+{
+    public class Startup
+    {
+        public Startup( IConfiguration configuration )
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices( IServiceCollection services )
+        {
+            // add your services here.
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure( IApplicationBuilder app, bool isDevelopmentEnv )
+        {
+        }
+    }
+}
+```
+
 ## Debugging and running locally
 
 It is possible to run a function locally with [FaaS Runner](https://github.com/goncalo-oliveira/faas-run). This also adds the option to attach to the process when running, to be able to debug the function. A configuration file can be passed to the runner. The CLI takes the assembly pat as argument.
