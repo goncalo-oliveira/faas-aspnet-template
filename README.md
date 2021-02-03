@@ -185,7 +185,7 @@ namespace OpenFaaS
 
 ## Controller-based template
 
-Sometimes we want to create a more complex workload, with multiple methods or even with multiple routes. For these scenarios, we wan us the `aspnet-controller` template. When we create a new function with this template, instead of having a `Function.cs` we now have a `Controller.cs` file.
+Sometimes we want to create a more complex workload, with multiple methods or even with multiple routes. For these scenarios, we can use the `aspnet-controller` template. When we create a new function with this template, instead of having a `Function.cs` we now have a `Controller.cs` file.
 
 ```csharp
 namespace OpenFaaS
@@ -243,6 +243,8 @@ It is possible to run a function locally with [FaaS Runner](https://github.com/g
 ```
 ~/source/hello$ faas-run bin/Debug/netstandard2.0/function.dll
 ```
+
+> To run an `aspnet-controller` function, version **1.6+** is required.
 
 ### VS Code
 
