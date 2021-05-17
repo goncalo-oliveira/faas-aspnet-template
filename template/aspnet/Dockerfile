@@ -1,4 +1,4 @@
-FROM openfaas/of-watchdog:0.8.1 as watchdog
+FROM openfaas/of-watchdog:0.8.2 as watchdog
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim as builder
 ARG PACKAGE_SOURCE
@@ -26,7 +26,7 @@ COPY . .
 RUN dotnet publish -c release -o published function/function.csproj
 
 # runner
-FROM docker.pkg.github.com/goncalo-oliveira/faas-run/faas-run:1.6
+FROM ghcr.io/goncalo-oliveira/faas-run:1.6.1
 
 COPY --from=watchdog /fwatchdog /usr/bin/
 
@@ -44,6 +44,13 @@ ENV fprocess="faas-run ./function.dll"
 ENV cgi_headers="true"
 ENV mode="http"
 ENV upstream_url="http://localhost:9000"
+
+ENV exec_timeout="30s"
+ENV write_timeout="15s"
+ENV read_timeout="15s"
+
+ENV prefix_logs="false"
+
 EXPOSE 8080
 
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
