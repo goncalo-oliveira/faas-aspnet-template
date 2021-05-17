@@ -1,5 +1,5 @@
 language: aspnet-fsharp
 fprocess: faas-run ./function.dll
 welcome_message: |
-  You have created a F# function using ASPNET Functions v1.4.
+  You have created a F# function using ASPNET Functions v1.4.1.
 
