@@ -257,7 +257,7 @@ When using VS Code, a configuration can be easily created in `launch.json` file 
     "request": "launch",
     "preLaunchTask": "build",
     "program": "faas-run",
-    "args": ["bin/Debug/netstandard2.0/function.dll", "--no-auth"],
+    "args": ["bin/Debug/net5.0/function.dll", "--no-auth"],
     "cwd": "${workspaceFolder}",
     "stopAtEntry": false,
     "console": "internalConsole"
