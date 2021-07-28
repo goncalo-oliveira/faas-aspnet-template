@@ -1,4 +1,4 @@
-FROM openfaas/of-watchdog:0.8.2 as watchdog
+FROM openfaas/of-watchdog:0.8.4 as watchdog
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim as builder
 ARG PACKAGE_SOURCE
@@ -26,7 +26,7 @@ COPY . .
 RUN dotnet publish -c release -o published function/function.fsproj
 
 # runner
-FROM ghcr.io/goncalo-oliveira/faas-run:1.6.2
+FROM ghcr.io/goncalo-oliveira/faas-run:1.7
 
 COPY --from=watchdog /fwatchdog /usr/bin/
 

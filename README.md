@@ -2,13 +2,15 @@
 
 This project offers templates for OpenFaaS that make use of ASP.NET 5. The templates allow more control over the request (by providing an `HttpRequest` instance) and a better handling of the response by returning an `IActionResult`. Both C# and F# languages are supported.
 
-## Installing the template
+## Installing the templates
 
-Just pull the template with the faas CLI.
+Just pull the templates with the faas CLI.
 
 ```bash
 faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template
 ```
+
+If you are upgrading, use the flag `--overwrite` to write over the existing templates.
 
 ## Using the template
 
@@ -235,6 +237,12 @@ namespace OpenFaaS
     }
 }
 ```
+
+## Polymorphic serialization
+
+Since template version 1.5, which uses [FaaS Runner](https://github.com/goncalo-oliveira/faas-run) 1.7, the default JSON serializer from Microsoft is used in place of Newtonsoft's. This means that there is limited support for polymorphic serialization and deserialization is not supported at all. You can find more in [this article](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-polymorphism) where you will also find a few workarounds, including writing a custom converter.
+
+If you rather use [Newtonsoft's Json.NET](https://www.newtonsoft.com/json), you still can. Find out more [here](https://github.com/goncalo-oliveira/faas-aspnet-newtonsoft/).
 
 ## Debugging and running locally
 
