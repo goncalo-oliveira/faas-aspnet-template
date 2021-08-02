@@ -1,4 +1,4 @@
-FROM openfaas/of-watchdog:0.8.4 as watchdog
+FROM openfaas/of-watchdog:0.8.2 as watchdog
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim as builder
 ARG PACKAGE_SOURCE
