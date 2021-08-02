@@ -26,7 +26,7 @@ COPY . .
 RUN dotnet publish -c release -o published function/function.csproj
 
 # runner
-FROM ghcr.io/goncalo-oliveira/faas-run:1.7
+FROM ghcr.io/goncalo-oliveira/faas-run/faas-run:1.7
 
 COPY --from=watchdog /fwatchdog /usr/bin/
 
