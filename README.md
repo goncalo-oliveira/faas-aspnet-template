@@ -14,7 +14,7 @@ If you are upgrading, use the flag `--overwrite` to write over the existing temp
 
 ## Using the template
 
-After installing, create a new function with the `aspnet` template. This will generate a C# template. If you want to create a F# template instead, use the `aspnet-fsharp` template.
+After installing, create a new function with the `aspnet` template. This will generate a C# template. If you want to create an F# template instead, use the `aspnet-fsharp` template.
 
 ```bash
 faas-cli new --lang aspnet <function-name>
