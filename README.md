@@ -244,6 +244,25 @@ Since template version 1.5, which uses [FaaS Runner](https://github.com/goncalo-
 
 If you rather use [Newtonsoft's Json.NET](https://www.newtonsoft.com/json), you still can. Find out more [here](https://github.com/goncalo-oliveira/faas-aspnet-newtonsoft/).
 
+## Customizing Json serializer
+
+If you need to customize the serialization options, you can easily do so on the `Startup.cs` class. If using Microsoft's JSON serializer (default from template version 1.5), you can do the following
+
+```csharp
+public void ConfigureServices( IServiceCollection services )
+{
+    services.Configure<JsonOptions>( options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    } );
+
+    // add your services here.
+}
+```
+
+If you are using [Newtonsoft's Json.NET](https://www.newtonsoft.com/json) instead, read [here](https://github.com/goncalo-oliveira/faas-aspnet-newtonsoft/).
+
 ## Debugging and running locally
 
 It is possible to run a function locally with [FaaS Runner](https://github.com/goncalo-oliveira/faas-run). This also adds the option to attach to the process when running, to be able to debug the function. A configuration file can be passed to the runner. The CLI takes the assembly path as argument.
