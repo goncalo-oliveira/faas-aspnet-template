@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OpenFaaS;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OpenFaaS
 {
-    public class Function : HttpFunction
+    [ApiController]
+    [Route("/")]
+    public class Function : ControllerBase
     {
         [HttpGet]
         [HttpPost]
-        public override Task<IActionResult> HandleAsync( HttpRequest request )
+        public Task<IActionResult> ExecuteAsync()
         {
             var result = new
             {

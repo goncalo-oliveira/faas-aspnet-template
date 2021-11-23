@@ -1,16 +1,16 @@
 ﻿namespace OpenFaaS
 
-open Microsoft.AspNetCore.Http
-open Microsoft.AspNetCore.Mvc
-open OpenFaaS
 open System
 open System.Threading.Tasks
+open Microsoft.AspNetCore.Mvc
 
+[<ApiController>]
+[<Route("/")>]
 type Function() =
-    inherit HttpFunction()
+    inherit ControllerBase()
 
     [<HttpGet>]
     [<HttpPost>]
-    override this.HandleAsync( request : HttpRequest ) =
+    member this.ExecuteAsync() =
         let result = {| Message = "Hello" |}
         Task.FromResult( this.Ok( result ) :> IActionResult )

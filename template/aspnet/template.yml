@@ -1,4 +1,4 @@
 language: aspnet
-fprocess: faas-run ./function.dll
+fprocess: ./function
 welcome_message: |
-  You have created a C# function using ASPNET Functions v1.5.2.
+  You have created a C# function using ASPNET Functions v2.0.
