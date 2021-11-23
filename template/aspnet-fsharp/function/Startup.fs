@@ -1,5 +1,6 @@
 namespace OpenFaaS
 
+open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 
@@ -10,6 +11,10 @@ type Startup private () =
 
     // This method gets called by the runtime. Use this method to add services to the container.
     member this.ConfigureServices( services: IServiceCollection ) =
-        services.AddHttpFunction<Function>() |> ignore
+        () |> ignore
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    member this.Configure( app: IApplicationBuilder, isDevelopmentEnv: bool ) =
+        () |> ignore
 
     member val Configuration : IConfiguration = null with get, set

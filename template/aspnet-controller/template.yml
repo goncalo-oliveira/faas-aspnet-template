@@ -1,4 +1,0 @@
-language: aspnet-controller
-fprocess: faas-run ./function.dll
-welcome_message: |
-  You have created a C# controller function using ASPNET Functions v1.5.2.

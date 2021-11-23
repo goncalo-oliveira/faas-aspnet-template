@@ -1,6 +1,6 @@
-FROM ghcr.io/openfaas/of-watchdog:0.8.4 as watchdog
+FROM ghcr.io/openfaas/of-watchdog:0.9.2 as watchdog
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim as builder
+FROM mcr.microsoft.com/dotnet/sdk:5.0-bullseye-slim as builder
 ARG PACKAGE_SOURCE
 ARG PACKAGE_SOURCE_USERNAME
 ARG PACKAGE_SOURCE_PASSWORD
@@ -26,7 +26,7 @@ COPY . .
 RUN dotnet publish -c release -o published function/function.csproj
 
 # runner
-FROM ghcr.io/goncalo-oliveira/faas-run:1.8
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-bullseye-slim
 
 COPY --from=watchdog /fwatchdog /usr/bin/
 
@@ -40,7 +40,7 @@ RUN chown app:app -R /home/app
 
 USER app
 
-ENV fprocess="faas-run ./function.dll"
+ENV fprocess="./function"
 ENV cgi_headers="true"
 ENV mode="http"
 ENV upstream_url="http://localhost:9000"
