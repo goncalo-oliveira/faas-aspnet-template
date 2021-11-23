@@ -1,6 +1,6 @@
 FROM ghcr.io/openfaas/of-watchdog:0.9.2 as watchdog
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-bullseye-slim as builder
+FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim as builder
 ARG PACKAGE_SOURCE
 ARG PACKAGE_SOURCE_USERNAME
 ARG PACKAGE_SOURCE_PASSWORD
@@ -23,10 +23,16 @@ WORKDIR /source/faas
 COPY . .
 
 # build and publish
-RUN dotnet publish -c release -o published function/function.csproj
+RUN dotnet publish \
+    -c release \
+    -r linux-x64 \
+    --no-self-contained \
+    -p:PublishReadyToRun=true \
+    -o published \
+    function/function.csproj
 
 # runner
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-bullseye-slim
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim
 
 COPY --from=watchdog /fwatchdog /usr/bin/
 
