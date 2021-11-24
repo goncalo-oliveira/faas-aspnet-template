@@ -154,7 +154,7 @@ services.ConfigureFunction() // returns an IFunctionBuilder
 
 ## Private Repositories
 
-If your function has packages from private repositories, you'll need to provide a nuget configuration file to the image build process. On previous versions this could be done with build arguments, but that was considered insecure. Since version 2.x this can only be done with secrets, using BuildKit.
+If your function has packages from private repositories, you'll need to provide a nuget configuration file to the image build process. On previous versions this could be done with build arguments, but that is considered insecure. Since version 2.x this can only be done with secrets, using BuildKit.
 
 > The OpenFaaS CLI doesn't seem yet to support this, therefore, this can only be done with the Docker CLI.
 
