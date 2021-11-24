@@ -1,9 +1,19 @@
-using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using OpenFaaS.Hosting;
 
-namespace OpenFaaS
+Runner.Run( args, builder =>
 {
-    class Program
+    // add your services to the container
+}, app =>
+{
+    // configure the HTTP request pipeline
+
+    app.MapPost( "/", () =>
     {
-        static void Main( string[] args ) => Hosting.Runner.Run( args );
-    }
-}
+        return new
+        {
+            Message = "Hello"
+        };
+    } );
+} );

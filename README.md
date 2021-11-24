@@ -9,7 +9,7 @@ Just pull the templates with the faas CLI.
 > Since v2.0 is still in preview, you'll need to reference the pre-release version.
 
 ```bash
-faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template#v2.0-preview-3
+faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template#v2.0-preview-4
 ```
 
 If you are upgrading, use the flag `--overwrite` to write over the existing templates.
@@ -28,31 +28,80 @@ After installing, create a new function with the `aspnet` template. This will ge
 faas-cli new --lang aspnet <function-name>
 ```
 
-A file named `Function.cs` is generated when you create a new function with this template. In this file is a class named `Function` that implements `ControllerBase`. This is what it looks like:
+A single `Program.cs` file is generated when you create a new function with this template. This is because by default, a minimal API structure is used. Let's have a look at the contents:
 
 ``` csharp
+Runner.Run( args, builder =>
+{
+    // add your services to the container
+}, app =>
+{
+    // configure the HTTP request pipeline
+
+    app.MapPost( "/", () =>
+    {
+        return new
+        {
+            Message = "Hello"
+        };
+    } );
+} );
+```
+
+If what you are building is a [micro-apis](https://itnext.io/micro-apis-with-openfaas-and-net-f82115efce4) or if you rather use a `Startup.cs` and the Generic Host model, you can update `Program.cs` with the following code
+
+```csharp
+Runner.Run( args, typeof( OpenFaaS.Startup ) );
+```
+
+Then, you can either add a minimal `Startup.cs` file, which looks like this
+
+```csharp
 namespace OpenFaaS
 {
-    [ApiController]
-    [Route("/")]
-    public class Function : ControllerBase
+    public class Startup
     {
-        [HttpGet]
-        [HttpPost]
-        public Task<IActionResult> ExecuteAsync()
+        public void Configure( WebApplicationBuilder builder )
         {
-            var result = new
-            {
-                Message = "Hello!"
-            };
+            // configure the application builder
+        }
 
-            return Task.FromResult<IActionResult>( Ok( result ) );
+        public void Configure( WebApplication app )
+        {
+            // configure the HTTP request pipeline
         }
     }
 }
 ```
 
-As you can see, the function is just an MVC controller; this serves the purposes of either single action function and [micro-apis](https://itnext.io/micro-apis-with-openfaas-and-net-f82115efce4).
+Or you can add a standard `Startup.cs` file
+
+```csharp
+namespace OpenFaaS
+{
+    public class Startup
+    {
+        public Startup( IConfiguration configuration )
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        public void ConfigureServices( IServiceCollection services )
+        {
+            // add your services to the container
+        }
+
+        public void Configure( IApplicationBuilder app, bool isDevelopmentEnv )
+        {
+            // configure the HTTP request pipeline
+        }
+    }
+}
+```
+
+Since you're not using a minimal API anymore, you'll also need to add at least one controller class.
 
 ## OpenFaaS Secrets
 
@@ -63,14 +112,12 @@ NOTE: The value of the secret is read as a byte array and then stored as a base6
 You can also use the extension methods `GetSecret` and `GetSecretAsString`.
 
 ```csharp
-public void ConfigureServices( IServiceCollection services )
+IServiceCollection services = ...
+
+services.AddMyService( options =>
 {
-    // add your services here.
-    services.AddMyService( options =>
-    {
-        options.ApiKey = Configuration.GetSecretAsString( "my-api-key" );
-    } );
-}
+    options.ApiKey = Configuration.GetSecretAsString( "my-api-key" );
+} );
 ```
 
 ## Polymorphic serialization
@@ -80,69 +127,44 @@ The JSON serializer from Microsoft is used by default. This means that there is 
 If you rather use [Newtonsoft's Json.NET](https://www.newtonsoft.com/json), you still can. Add the package `OpenFaaS.Runner.NewtonsoftJson` and use the function builder to extend the functionality
 
 ```csharp
-public void ConfigureServices( IServiceCollection services )
-{
-    var functionBuilder = services.ConfigureFunction();
+IServiceCollection services = ...
 
-    functionBuilder.AddNewtonsoftJson();
-}
-
+services.ConfigureFunction()
+    .AddNewtonsoftJson();
 ```
 
 ## Function Builder
 
-If you need to customize the function's behaviour, such as Json serialization options for example, you can use the function builder to extend functionality
+If you need to customize the function's behaviour, such as Json serialization options or routing options for example, you can use the function builder to extend functionality
 
 ```csharp
-public void ConfigureServices( IServiceCollection services )
-{
-    var functionBuilder = services.ConfigureFunction();
+IServiceCollection services = ...
 
-    functionBuilder.ConfigureJsonOptions( options =>
+services.ConfigureFunction() // returns an IFunctionBuilder
+    .ConfigureJsonOptions( options =>
     {
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    } )
+    .ConfigureRouteOptions( options =>
+    {
+        options.LowercaseUrls = true;
     } );
-}
 ```
 
 ## Migrating from v1.x
 
 Version 2.x brings better performance and less friction with dependencies by dropping the usage of `faas-run`. Unless there's a particular reason for not doing so, it is recommended to upgrade your functions to the newer templates.
 
-The templates from v1.x included two C# projects; one that inherited `IHttpFunction`, designed to execute a single action and another one that inherited `ControllerBase`, designed to support [micro-apis](https://itnext.io/micro-apis-with-openfaas-and-net-f82115efce4). In total, there were three templates
+The templates from v1.x included two C# projects; one that derives from `IHttpFunction`, designed to execute a single action (*pure* functions) and another one that derives from `ControllerBase`, designed to support [micro-apis](https://itnext.io/micro-apis-with-openfaas-and-net-f82115efce4). In total, there were three templates
 
 - aspnet (IHttpFunction)
 - aspnet-controller (ControllerBase)
 - aspnet-fsharp (IHttpFunction)
 
-Version 2.x dropped `IHttpFunction` inheritance and all functions inherit `ControllerBase`, either they are *pure* functions or *micro-apis*. This applies to both C# and F# templates; so now, there are only two templates (aspnet and aspnet-fsharp). Here's what the C# function looks like
+Version 2.x dropped `IHttpFunction` inheritance. Functions are either directly mapped using a minimal API (great for *pure* functions) or they implement one or more controllers, derived from `ControllerBase` (better choice for *micro-apis*). This applies to both C# and F# templates; so now, there are only two templates (aspnet and aspnet-fsharp).
 
-```csharp
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace OpenFaaS
-{
-    [ApiController]
-    [Route("/")]
-    public class Function : ControllerBase
-    {
-        [HttpGet]
-        [HttpPost]
-        public Task<IActionResult> ExecuteAsync()
-        {
-            var result = new
-            {
-                Message = "Hello!"
-            };
-
-            return Task.FromResult<IActionResult>( Ok( result ) );
-        }
-    }
-}
-```
+If your current function derives from `IHttpFunction`, the recommended course of action is to migrate to a minimal API function (which is what the template generates by default).
 
 The project file also suffered some changes; it is now an executable and not a library, and replaced `OpenFaaS.Functions` with `OpenFaaS.Runner`.
 
@@ -153,7 +175,7 @@ The easiest way is to create a separate dummy project to serve as a reference as
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>OpenFaaS</RootNamespace>
   </PropertyGroup>
 
@@ -168,16 +190,36 @@ The easiest way is to create a separate dummy project to serve as a reference as
 </Project>
 ```
 
-The new function, now an executable, also needs a `Program.cs`, which looks like this
+If you're going for a minimal API (your current function derives from `IHttpFunction`), the `Startup.cs` and the `Function.cs` files disappear. Instead, you'll have a `Program.cs` that looks like this
 
 ```csharp
-using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using OpenFaaS.Hosting;
 
-namespace OpenFaaS
+Runner.Run( args, builder =>
 {
-    class Program
+    // your Startup.cs > ConfigureServices( IServiceCollection ) goes in here
+}, app =>
+{
+    // your Startup.cs > Configure( IApplicationBuilder, bool ) goes in here
+
+    // your Function.cs is implemented here
+    app.MapPost( "/", () =>
     {
-        static void Main( string[] args ) => Hosting.Runner.Run( args );
-    }
-}
+        return new
+        {
+            Message = "Hello"
+        };
+    } );
+} );
+```
+
+If your current function is using the old `aspnet-controller` template, there are less changes to be made. The `Startup.cs` file can be maintained as it is. The same goes for the controller(s). You'll need to add a `Program.cs` similar to this
+
+```csharp
+using OpenFaaS;
+using OpenFaaS.Hosting;
+
+Runner.Run( args, typeof( Startup ) );
 ```
