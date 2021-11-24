@@ -152,6 +152,26 @@ services.ConfigureFunction() // returns an IFunctionBuilder
     } );
 ```
 
+## Private Repositories
+
+If your function has packages from private repositories, you'll need to provide a nuget configuration file to the image build process. On previous versions this could be done with build arguments, but that was considered insecure. Since version 2.x this can only be done with secrets, using BuildKit.
+
+> The OpenFaaS CLI doesn't seem yet to support this, therefore, this can only be done with the Docker CLI.
+
+First, you'll need to make sure you are using BuildKit. This can be done with an environment variable.
+
+```bash
+export DOCKER_BUILDKIT=1
+```
+
+You'll need a `NuGet.Config` file. Let's consider we have one at `/home/user/.nuget/NuGet/NuGet.Config`. We just need to pass the file as a secret with the docker build; the name of the secret has to be `nuget.config`.
+
+```bash
+docker build -t function --secret id=nuget.config,src=/home/goncalo/.nuget/NuGet/NuGet.Config .
+```
+
+> Currently, the passwords on the configuration file need to be stored in clear text. If you are on Windows, this won't be the case for the `NuGet.Config` on your computer.
+
 ## Migrating from v1.x
 
 Version 2.x brings better performance and less friction with dependencies by dropping the usage of `faas-run`. Unless there's a particular reason for not doing so, it is recommended to upgrade your functions to the newer templates.

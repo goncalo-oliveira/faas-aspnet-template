@@ -1,9 +1,9 @@
+# syntax=docker/dockerfile:1.3
 FROM ghcr.io/openfaas/of-watchdog:0.9.2 as watchdog
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim as builder
-ARG PACKAGE_SOURCE
-ARG PACKAGE_SOURCE_USERNAME
-ARG PACKAGE_SOURCE_PASSWORD
+
+RUN apt update && apt install libxml2-utils -y
 
 # suppress data collection
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
@@ -13,10 +13,10 @@ WORKDIR /source/faas/function
 COPY function/function.csproj .
 
 # restore packages
-COPY add-package-source.sh /tmp/
-RUN chmod u+x /tmp/add-package-source.sh \
-    && /tmp/add-package-source.sh $PACKAGE_SOURCE $PACKAGE_SOURCE_USERNAME $PACKAGE_SOURCE_PASSWORD \
-    && dotnet restore
+COPY add-nuget-config.sh /tmp/
+RUN chmod u+x /tmp/add-nuget-config.sh
+RUN --mount=type=secret,id=nuget.config /tmp/add-nuget-config.sh nuget.config \
+    dotnet restore
 
 # Copies the rest of the code
 WORKDIR /source/faas
