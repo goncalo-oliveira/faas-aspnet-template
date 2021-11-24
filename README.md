@@ -48,7 +48,7 @@ Runner.Run( args, builder =>
 } );
 ```
 
-If what you are building is a [micro-apis](https://itnext.io/micro-apis-with-openfaas-and-net-f82115efce4) or if you rather use a `Startup.cs` and the Generic Host model, you can update `Program.cs` with the following code
+If what you are building is a [micro-api](https://itnext.io/micro-apis-with-openfaas-and-net-f82115efce4) or if you rather use a `Startup.cs` and the Generic Host model, you can update `Program.cs` with the following code
 
 ```csharp
 Runner.Run( args, typeof( OpenFaaS.Startup ) );
@@ -162,13 +162,13 @@ The templates from v1.x included two C# projects; one that derives from `IHttpFu
 - aspnet-controller (ControllerBase)
 - aspnet-fsharp (IHttpFunction)
 
-Version 2.x dropped `IHttpFunction` inheritance. Functions are either directly mapped using a minimal API (great for *pure* functions) or they implement one or more controllers, derived from `ControllerBase` (better choice for *micro-apis*). This applies to both C# and F# templates; so now, there are only two templates (aspnet and aspnet-fsharp).
+The `IHttpFunction` interface disappeared in version 2.x. Functions are either directly mapped using a minimal API (great for *pure* functions) or they implement one or more controllers, derived from `ControllerBase` (better choice for *micro-apis*). This applies to both C# and F# templates; so now, there are only two templates (aspnet and aspnet-fsharp).
 
 If your current function derives from `IHttpFunction`, the recommended course of action is to migrate to a minimal API function (which is what the template generates by default).
 
 The project file also suffered some changes; it is now an executable and not a library, and replaced `OpenFaaS.Functions` with `OpenFaaS.Runner`.
 
-The easiest way is to create a separate dummy project to serve as a reference as you make the changes. Nonetheless, here's what the function project file looks like
+The easiest way is to create a separate *hello* project to serve as a reference as you make the changes. Nonetheless, here's what the function project file looks like
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -215,7 +215,7 @@ Runner.Run( args, builder =>
 } );
 ```
 
-If your current function is using the old `aspnet-controller` template, there are less changes to be made. The `Startup.cs` file can be maintained as it is. The same goes for the controller(s). You'll need to add a `Program.cs` similar to this
+If your current function is using the "old" `aspnet-controller` template, there are less changes to be made. The `Startup.cs` file can be maintained as it is. The same goes for the controller(s). You'll just need to add a `Program.cs` file similar to this
 
 ```csharp
 using OpenFaaS;
