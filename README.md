@@ -2,19 +2,19 @@
 
 This project offers templates for OpenFaaS that make use of ASP.NET. The templates allow more control over the request and a better handling of the response by using the ASP.NET framework. Both C# and F# template are available.
 
+Learn more about [OpenFaaS](https://github.com/openfaas/faas)
+
 ## Installing the templates
 
 Just pull the templates with the faas CLI.
 
-> Since v2.0 is still in preview, you'll need to reference the pre-release version.
-
 ```bash
-faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template#v2.0-preview-5
+faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template
 ```
 
 If you are upgrading, use the flag `--overwrite` to write over the existing templates.
 
-If you want to install a previous version, you can indicate still do it by referencing the release.
+If you want to install a previous version, you can still do it by referencing the release tag.
 
 ```bash
 faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template#v1.5.2
