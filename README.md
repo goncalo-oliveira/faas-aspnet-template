@@ -9,7 +9,7 @@ Just pull the templates with the faas CLI.
 > Since v2.0 is still in preview, you'll need to reference the pre-release version.
 
 ```bash
-faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template#v2.0-preview-4
+faas-cli template pull https://github.com/goncalo-oliveira/faas-aspnet-template#v2.0-preview-5
 ```
 
 If you are upgrading, use the flag `--overwrite` to write over the existing templates.
