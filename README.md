@@ -1,6 +1,6 @@
 # OpenFaaS ASPNET Functions
 
-This project offers templates for OpenFaaS that make use of ASP.NET. The templates allow more control over the request and a better handling of the response by using the ASP.NET framework. Both C# and F# template are available.
+This project offers templates for OpenFaaS that make use of ASP.NET. The templates allow more control over the request and a better handling of the response by using the ASP.NET framework. Both C# and F# templates are available.
 
 Learn more about [OpenFaaS](https://github.com/openfaas/faas)
 
