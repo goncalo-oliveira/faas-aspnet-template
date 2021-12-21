@@ -152,17 +152,34 @@ services.ConfigureFunction() // returns an IFunctionBuilder
     } );
 ```
 
-## Private Repositories
+## BuildKit
 
-If your function has packages from private repositories, you'll need to provide a nuget configuration file to the image build process. On previous versions this could be done with build arguments, but that is considered insecure. Since version 2.x this can only be done with secrets, using BuildKit.
-
-> The OpenFaaS CLI doesn't seem yet to support this, therefore, this can only be done with the Docker CLI (or BuildKit standalone).
-
-First, you'll need to make sure you are using BuildKit. This can be done with an environment variable.
+The templates are using BuildKit syntax since v2.x, so you'll need to make sure you are using it. This can be done with an environment variable
 
 ```bash
+# for the current terminal session
 export DOCKER_BUILDKIT=1
+
+# for the current terminal command
+DOCKER_BUILDKIT=1 faas-cli build -f hello.yml
 ```
+
+To enable BuildKit by default, we can set the feature to true on the daemon configuration (usually /etc/docker/daemon.json) and restart the daemon.
+
+```json
+{
+    "features":
+    {
+        "buildkit": true
+    }
+}
+```
+
+## Private Repositories
+
+If your function has packages from private repositories, you'll need to provide a nuget configuration file to the image build process. On previous versions this could be done with build arguments, but that is considered insecure. Since version 2.x this can only be done with secrets (and BuildKit).
+
+> The OpenFaaS CLI doesn't seem yet to support this, therefore, this can only be done with the Docker CLI (or BuildKit standalone).
 
 You'll need a `NuGet.Config` file. Let's consider we have one at `/home/user/.nuget/NuGet/NuGet.Config`. We just need to pass the file as a secret with the docker build; the name of the secret has to be `nuget.config`.
 
@@ -175,8 +192,7 @@ faas-cli build -f hello.yml --shrinkwrap
 The above prepares our function in the `./build/` folder. Now we can use Docker CLI.
 
 ```bash
-cd build/hello
-docker build -t hello --secret id=nuget.config,src=/home/user/.nuget/NuGet/NuGet.Config .
+docker build -t hello --secret id=nuget.config,src=/home/user/.nuget/NuGet/NuGet.Config build/hello
 ```
 
 > Currently, the passwords on the configuration file need to be stored in clear text. If you are on Windows, this won't be the case for the `NuGet.Config` on your computer.
@@ -213,7 +229,7 @@ The easiest way is to create a separate *hello* project to serve as a reference 
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenFaaS.Runner" Version="2.0.0" />
+    <PackageReference Include="OpenFaaS.Runner" Version="2.0.2" />
   </ItemGroup>
 
 </Project>
