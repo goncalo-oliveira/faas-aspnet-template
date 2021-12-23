@@ -50,6 +50,7 @@ ENV fprocess="./function"
 ENV cgi_headers="true"
 ENV mode="http"
 ENV upstream_url="http://localhost:9000"
+ENV ASPNETCORE_URLS=http://+:9000
 
 ENV exec_timeout="30s"
 ENV write_timeout="15s"
