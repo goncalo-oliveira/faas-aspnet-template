@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM ghcr.io/openfaas/of-watchdog:0.9.2 as watchdog
+FROM ghcr.io/openfaas/of-watchdog:0.9.6 as watchdog
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim as builder
 
