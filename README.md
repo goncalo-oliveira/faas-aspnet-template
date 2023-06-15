@@ -2,6 +2,8 @@
 
 This project offers templates for OpenFaaS that make use of ASP.NET. The templates allow more control over the request and a better handling of the response by using the ASP.NET framework. Both C# and F# templates are available.
 
+> NOTICE: I've stopped using OpenFaaS and as such, I'm no longer maintaining this project. I've moved all my workloads to [Knative](https://knative.dev/docs/) and [JustFaaS](https://github.com/justfaas/justfaas), which don't require the usage of templates.
+
 Learn more about [OpenFaaS](https://github.com/openfaas/faas)
 
 ## Installing the templates
